@@ -6,4 +6,3 @@ COPY index.html /usr/share/nginx/html/index.html
 
 # Expose port 80 to make the web page accessible
 EXPOSE 80
-
