@@ -22,8 +22,7 @@ jobs:
     # Build the Docker image
     - name: Build the Docker image
       run: |
-        docker build -t frontend-app:pr-${{ github.event.pull_request.number }} Desktop/Frontend1
-
+        docker build -t frontend-app:pr-${{ github.event.pull_request.number }} /home/ubentu/Desktop/Frontend1
     # Login to the remote server via SSH
     - name: SSH and deploy Docker image
       uses: appleboy/ssh-action@v0.1.3
