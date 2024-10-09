@@ -1,0 +1,38 @@
+
+name: PR Deployment
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository code
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Set up Docker Buildx for building images
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    # Build the Docker image
+    - name: Build the Docker image
+      run: |
+        docker build -t frontend-app:pr-${{ github.event.pull_request.number }} /home/ubentu/Desktop/Frontend1
+    # Login to the remote server via SSH
+    - name: SSH and deploy Docker image
+      uses: appleboy/ssh-action@v0.1.3
+      with:
+        host: 122.161.53.29  # Your server's public IP
+        username: Amandeep  # Your server's SSH username
+        password: u123  # Your server's SSH password
+        port: 22
+        script: |
+          docker stop pr-${{ github.event.pull_request.number }} || true
+          docker rm pr-${{ github.event.pull_request.number }} || true
+          docker run -d -p 80:80 --name pr-${{ github.event.pull_request.number }} frontend-app:pr-${{ github.event.pull_request.number }}
+
